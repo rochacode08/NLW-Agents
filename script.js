@@ -95,3 +95,4 @@ const submitForm = async (event) => {
   }
 }
 
+form.addEventListener("submit", submitForm)
