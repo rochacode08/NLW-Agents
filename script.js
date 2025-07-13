@@ -66,3 +66,32 @@ const askAI = async (question, game, apiKey) => {
   const data = await response.json()
   return data.candidates[0].content.parts[0].text
 }
+
+const submitForm = async (event) => {
+  event.preventDefault()
+
+  const apiKey = apiKeyInput.value
+  const game = gameSelect.value
+  const question = questionInput.value
+
+  if (apiKey == '' || game == '' || question == '') {
+    alert("Por favor, preencha todos os campos")
+    return
+  }
+
+  askButton.disabled = true
+  askButton.textContent = 'Perguntando...'
+  askButton.classList.add('loading')
+  try {
+    const text = await askAI(question, game, apiKey)
+    aiResponse.querySelector('.response-content').innerHTML = markdownToHTML(text)
+    aiResponse.classList.remove('hidden')
+  } catch (error) {
+    console.log('Erro', error)
+  } finally {
+    askButton.disabled = false
+    askButton.textContent = 'Perguntar'
+    askButton.classList.remove('loading')
+  }
+}
+
